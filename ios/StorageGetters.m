@@ -86,7 +86,6 @@
 }
 
 
-
 +(void)getMultipleItems:(NSString *)ID key:(NSArray*)keys
                 mmkvMap:(NSDictionary *)mmkvMap
                callback:(RCTResponseSenderBlock)callback
@@ -103,10 +102,10 @@
             
             if ([kv containsKey:key]) {
                 
-                NSDictionary* dic = [kv getObjectOfClass:NSDictionary.class forKey:key];
+                NSString* dic = [kv getObjectOfClass:NSString.class forKey:key];
                 NSMutableArray * array = [NSMutableArray array];
                 [array addObject:key];
-                [array addObject:dic];
+                [array addObject:dic? dic : [NSNull null]];
                 [objects addObject:array];
                 
             } else {

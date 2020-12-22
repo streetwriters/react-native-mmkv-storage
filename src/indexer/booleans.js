@@ -32,7 +32,10 @@ export default class boolIndex {
         this.options,
         this.MMKV.getItemsForType,
         (error, result) => {
-         
+          if (error) {
+            reject(error);
+            return;
+          }
           resolve(result);
         },
         this.instanceID,

@@ -83,20 +83,21 @@ public class StorageGetters {
 
 
             WritableArray args = Arguments.createArray();
-
+          
             for (int i = 0; i < keys.size(); i++) {
                 String key = keys.getString(i);
+             
                 if (kv.containsKey(key)) {
-                    Bundle bundle = kv.decodeParcelable(key, Bundle.class);
-                    WritableMap value = Arguments.fromBundle(bundle);
                     WritableArray item = Arguments.createArray();
+                    String string = kv.decodeString(key);
                     item.pushString(key);
-                    item.pushMap(value);
+                    item.pushString(string != null? string : null);
                     args.pushArray(item);
                 } else {
                     WritableArray item = Arguments.createArray();
                     item.pushString(key);
-                    item.pushMap(null);
+                    item.pushString(null);
+                    args.pushArray(item);
                 }
 
             }

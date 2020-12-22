@@ -20,7 +20,7 @@ export function handleAction(options, action, callback, ...args) {
   if (currentInstancesStatus[options.instanceID]) {
     return action(...args, callback);
   } else {
-    initialize(options, (err) => {
+    initialize(options, (err, result) => {
       if (err) {
         currentInstancesStatus[options.instanceID] = false;
         return callback(err, null);
@@ -42,7 +42,7 @@ export async function handleActionAsync(options, action, ...args) {
         reject(e);
       }
     } else {
-      initialize(options, async (err) => {
+      initialize(options, async (err, result) => {
         if (err) {
           currentInstancesStatus[options.instanceID] = false;
           return reject(err);
