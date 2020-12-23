@@ -5,7 +5,6 @@ export function promisify(fn) {
     return new Promise((resolve, reject) => {
 
       fn(...args, (error, result) => {
-          
           resolve(result);
       })
 
