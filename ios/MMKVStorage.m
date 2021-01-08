@@ -45,14 +45,20 @@ RCT_EXPORT_MODULE()
 {
     self = [super init];
     if (self) {
-         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-         NSString *libraryPath = (NSString *) [paths firstObject];
-         NSString *rootDir = [libraryPath stringByAppendingPathComponent:@"mmkv"];
-         [MMKV initializeMMKV:rootDir];
-        
-        secureStorage = [[SecureStorage alloc]init];
-        IdStore = [[IDStore alloc] initWithMMKV:[MMKV mmkvWithID:@"mmkvIdStore"]];
-        mmkvMap = [NSMutableDictionary dictionary];
+        //NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+       // NSString *libraryPath = (NSString *) [paths firstObject];
+       
+       NSString *myGroupID = @"group.org.streetwriters.notesnook";
+       // the group dir that can be accessed by App & extensions
+       NSString *groupDir = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:myGroupID].path;
+       [MMKV initializeMMKV:nil groupDir:groupDir logLevel:MMKVLogInfo];
+       
+       // NSString *rootDir = [libraryPath stringByAppendingPathComponent:@"mmkv"];
+       // [MMKV initializeMMKV:rootDir];
+       
+       secureStorage = [[SecureStorage alloc]init];
+       IdStore = [[IDStore alloc] initWithMMKV:[MMKV mmkvWithID:@"mmkvIdStore"]];
+       mmkvMap = [NSMutableDictionary dictionary];
         
     }
     
@@ -75,7 +81,7 @@ RCT_EXPORT_METHOD(setupWithEncryption:(NSString *)ID
     
     NSData *key = [cryptKey dataUsingEncoding:NSUTF8StringEncoding];
     if ([mode isEqualToNumber:@1]) {
-        kv = [MMKV mmkvWithID:ID cryptKey:key mode:MMKVSingleProcess];
+        kv = [MMKV mmkvWithID:ID cryptKey:key mode:MMKVMultiProcess];
     } else {
         kv = [MMKV mmkvWithID:ID cryptKey:key mode:MMKVMultiProcess];
     }
@@ -110,7 +116,7 @@ RCT_EXPORT_METHOD(setup:(NSString *)ID
     
     MMKV *kv;
     if ([mode isEqualToNumber:@1]) {
-        kv = [MMKV mmkvWithID:ID mode:MMKVSingleProcess];
+        kv = [MMKV mmkvWithID:ID mode:MMKVMultiProcess];
     } else {
         kv = [MMKV mmkvWithID:ID mode:MMKVMultiProcess];
     }
