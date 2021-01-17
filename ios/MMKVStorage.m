@@ -50,14 +50,17 @@ RCT_EXPORT_MODULE()
        
        NSString *myGroupID = @"group.org.streetwriters.notesnook";
        // the group dir that can be accessed by App & extensions
+        
+        
        NSString *groupDir = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:myGroupID].path;
-       [MMKV initializeMMKV:nil groupDir:groupDir logLevel:MMKVLogInfo];
-       
-       // NSString *rootDir = [libraryPath stringByAppendingPathComponent:@"mmkv"];
-       // [MMKV initializeMMKV:rootDir];
+       NSString *rootDir = [groupDir stringByAppendingPathComponent:@"mmkv"];
+       [MMKV initializeMMKV:nil groupDir:rootDir logLevel:MMKVLogInfo];
+        NSError *error = nil;
+        NSURL *url = [NSURL fileURLWithPath:rootDir isDirectory:YES];
+        [url setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
        
        secureStorage = [[SecureStorage alloc]init];
-       IdStore = [[IDStore alloc] initWithMMKV:[MMKV mmkvWithID:@"mmkvIdStore"]];
+       IdStore = [[IDStore alloc] initWithMMKV:[MMKV mmkvWithID:@"mmkvIdStore" mode:MMKVMultiProcess]];
        mmkvMap = [NSMutableDictionary dictionary];
         
     }
